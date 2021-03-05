@@ -37,80 +37,6 @@ namespace BusinessLayerTests
         }
 
         [Fact]
-        public void AddTransactionTest()
-        {
-            // Arrange
-            Category categoryHealth = new Category(1) { Name = "Health", Color = Color.Green };
-            Category categoryEat = new Category(2) { Name = "Eat", Color = Color.Red };
-
-            Wallet walletNoCategories = new Wallet(1) { Name = "Without categories", Currency = "UAH" };
-
-            Wallet walletHealthCategory = new Wallet(2) { Name = "With category (Health)", Currency = "USD" };
-            walletHealthCategory.Categories.Add(categoryHealth);
-
-            Transaction transactionEat = new Transaction(1) { Sum = -10.10M, Currency = "UAH", Category = categoryEat, Date = DateTime.Today};
-            Transaction transactionHealth = new Transaction(2) { Sum = -2.02M, Currency = "UAH", Category = categoryHealth, Date = DateTime.Today};
-
-            // Act
-            bool wncAddTe = walletNoCategories.AddTransaction(transactionEat);
-            bool wncAddTh = walletNoCategories.AddTransaction(transactionHealth);
-            bool whcAddTe = walletHealthCategory.AddTransaction(transactionEat);
-            bool whcAddTh = walletHealthCategory.AddTransaction(transactionHealth);
-
-            // Assert
-            Assert.True(wncAddTe);
-            Assert.True(wncAddTh);
-            Assert.Equal(2, walletNoCategories.GetTenRecentlyAddedTransactions().Count);
-            Assert.False(whcAddTe);
-            Assert.True(whcAddTh);
-            Assert.Single(walletHealthCategory.GetTenRecentlyAddedTransactions());
-        }
-
-        [Fact]
-        public void RemoveTransactionByValueTest()
-        {
-            // Arrange
-            Category category1 = new Category(1) { Name = "Salary", Color = Color.Blue };
-
-            Wallet wallet1 = new Wallet(1) { Name = "Wall_let", Currency = "UAH" };
-
-            Transaction transaction1 = new Transaction(1) { Sum = 10.10M, Currency = "UAH", Category = category1, Date = DateTime.Today };
-            Transaction transaction2 = new Transaction(2) { Sum = 5.19M, Currency = "UAH", Category = category1, Date = DateTime.Today };
-
-            wallet1.AddTransaction(transaction1);
-
-            // Act
-            bool remT1 = wallet1.RemoveTransaction(transaction1);
-            bool remT2 = wallet1.RemoveTransaction(transaction2);
-
-            // Assert
-            Assert.True(remT1);
-            Assert.False(remT2);
-        }
-
-        [Fact]
-        public void RemoveTransactionByIndexTest()
-        {
-            // Arrange
-            Category category1 = new Category(1) { Name = "Salary", Color = Color.Blue };
-
-            Wallet wallet1 = new Wallet(1) { Name = "Wall_let", Currency = "UAH" };
-
-            Transaction transaction1 = new Transaction(1) { Sum = 10.10M, Currency = "UAH", Category = category1, Date = DateTime.Today };
-            Transaction transaction2 = new Transaction(2) { Sum = 5.19M, Currency = "UAH", Category = category1, Date = DateTime.Today };
-
-            wallet1.AddTransaction(transaction1);
-
-            // Act
-            bool remT1 = wallet1.RemoveTransaction(1);
-            bool remT2 = wallet1.RemoveTransaction(0);
-
-            // Assert
-            Assert.True(remT1);
-            Assert.False(remT2);
-        }
-
-        [Fact]
         public void IncomesTest()
         {
             // Arrange
@@ -146,8 +72,13 @@ namespace BusinessLayerTests
 
             Transaction transaction1 = new Transaction(1) { Sum = 10.10M, Currency = "UAH", Category = category1, Date = DateTime.Today };
             Transaction transaction2 = new Transaction(2) { Sum = 132.32M, Currency = "UAH", Category = category1, Date = DateTime.Today };
-            Transaction transaction3 = new Transaction(3) { Sum = 43.76M, Currency = "UAH", Category = category1,
-                                                                Date = new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, DateTime.Today.Day) };
+            Transaction transaction3 = new Transaction(3)
+            {
+                Sum = 43.76M,
+                Currency = "UAH",
+                Category = category1,
+                Date = new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, DateTime.Today.Day)
+            };
 
             wallet1.AddTransaction(transaction1);
             wallet1.AddTransaction(transaction2);
@@ -198,8 +129,13 @@ namespace BusinessLayerTests
 
             Transaction transaction1 = new Transaction(1) { Sum = -10.10M, Currency = "UAH", Category = category1, Date = DateTime.Today };
             Transaction transaction2 = new Transaction(2) { Sum = -132.32M, Currency = "UAH", Category = category1, Date = DateTime.Today };
-            Transaction transaction3 = new Transaction(3) { Sum = -43.76M, Currency = "UAH", Category = category1,
-                                                                Date = new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, DateTime.Today.Day) };
+            Transaction transaction3 = new Transaction(3)
+            {
+                Sum = -43.76M,
+                Currency = "UAH",
+                Category = category1,
+                Date = new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, DateTime.Today.Day)
+            };
 
             wallet1.AddTransaction(transaction1);
             wallet1.AddTransaction(transaction2);
@@ -212,6 +148,79 @@ namespace BusinessLayerTests
 
             // Assert
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void AddTransactionTest()
+        {
+            // Arrange
+            Category categoryHealth = new Category(1) { Name = "Health", Color = Color.Green };
+            Category categoryEat = new Category(2) { Name = "Eat", Color = Color.Red };
+
+            Wallet walletNoCategories = new Wallet(1) { Name = "Without categories", Currency = "UAH" };
+
+            Wallet walletHealthCategory = new Wallet(2) { Name = "With category (Health)", Currency = "USD" };
+            walletHealthCategory.AddCategory(categoryHealth);
+
+            Transaction transactionEat = new Transaction(1) { Sum = -10.10M, Currency = "UAH", Category = categoryEat, Date = DateTime.Today};
+            Transaction transactionHealth = new Transaction(2) { Sum = -2.02M, Currency = "UAH", Category = categoryHealth, Date = DateTime.Today};
+
+            // Act
+            bool wncAddTe = walletNoCategories.AddTransaction(transactionEat);
+            bool wncAddTh = walletNoCategories.AddTransaction(transactionHealth);
+            bool whcAddTe = walletHealthCategory.AddTransaction(transactionEat);
+            bool whcAddTh = walletHealthCategory.AddTransaction(transactionHealth);
+
+            // Assert
+            Assert.True(wncAddTe);
+            Assert.True(wncAddTh);
+            Assert.Equal(2, walletNoCategories.GetTenRecentlyAddedTransactions().Count);
+            Assert.False(whcAddTe);
+            Assert.True(whcAddTh);
+            Assert.Single(walletHealthCategory.GetTenRecentlyAddedTransactions());
+        }
+
+        [Fact]
+        public void RemoveTransactionByValueTest()
+        {
+            // Arrange
+            Category category1 = new Category(1) { Name = "Salary", Color = Color.Blue };
+
+            Wallet wallet1 = new Wallet(1) { Name = "Wall_let", Currency = "UAH" };
+
+            Transaction transaction1 = new Transaction(1) { Sum = 10.10M, Currency = "UAH", Category = category1, Date = DateTime.Today };
+            Transaction transaction2 = new Transaction(2) { Sum = 5.19M, Currency = "UAH", Category = category1, Date = DateTime.Today };
+
+            wallet1.AddTransaction(transaction1);
+
+            // Act
+            bool remT1 = wallet1.RemoveTransaction(transaction1);
+            bool remT2 = wallet1.RemoveTransaction(transaction2);
+
+            // Assert
+            Assert.True(remT1);
+            Assert.False(remT2);
+        }
+
+        [Fact]
+        public void RemoveTransactionByIndexTest()
+        {
+            // Arrange
+            Category category1 = new Category(1) { Name = "Salary", Color = Color.Blue };
+
+            Wallet wallet1 = new Wallet(1) { Name = "Wall_let", Currency = "UAH" };
+
+            Transaction transaction1 = new Transaction(1) { Sum = 10.10M, Currency = "UAH", Category = category1, Date = DateTime.Today };
+
+            wallet1.AddTransaction(transaction1);
+
+            // Act
+            bool remT1 = wallet1.RemoveTransaction(1);
+            bool remT2 = wallet1.RemoveTransaction(0);
+
+            // Assert
+            Assert.True(remT1);
+            Assert.False(remT2);
         }
 
         [Fact]
@@ -286,6 +295,105 @@ namespace BusinessLayerTests
             for (int i = actual.Count - 1; i >= 0; i--)
             {
                 Assert.Equal(transactions[i + (transactions.Count - actual.Count)], actual[i]);
+            }
+        }
+
+        [Fact]
+        public void AddCategoryTest()
+        {
+            // Arrange
+            Category category1 = new Category(1) { Name = "Health", Color = Color.Green };
+
+            Wallet wallet1 = new Wallet(1) { Name = "Wall_let", Currency = "UAH" };
+
+            // Act
+            bool actualAddFirstTime = wallet1.AddCategory(category1);
+            bool actualAddSecondTime = wallet1.AddCategory(category1);
+
+            // Assert
+            Assert.True(actualAddFirstTime);
+            Assert.False(actualAddSecondTime);
+        }
+
+        [Fact]
+        public void RemoveCategoryByValueTest()
+        {
+            // Arrange
+            Category category1 = new Category(1) { Name = "Health", Color = Color.Green };
+            Category category2 = new Category(2) { Name = "Eat", Color = Color.Red };
+
+            Wallet wallet1 = new Wallet(1) { Name = "Wall_let", Currency = "UAH" };
+        
+            wallet1.AddCategory(category1);
+        
+            // Act
+            bool remC1 = wallet1.RemoveCategory(category1);
+            bool remC2 = wallet1.RemoveCategory(category2);
+        
+            // Assert
+            Assert.True(remC1);
+            Assert.False(remC2);
+        }
+        
+        [Fact]
+        public void RemoveCategoryByIndexTest()
+        {
+            // Arrange
+            Category category1 = new Category(1) { Name = "Salary", Color = Color.Blue };
+        
+            Wallet wallet1 = new Wallet(1) { Name = "Wall_let", Currency = "UAH" };
+        
+            wallet1.AddCategory(category1);
+        
+            // Act
+            bool remC1 = wallet1.RemoveCategory(1);
+            bool remC2 = wallet1.RemoveCategory(0);
+        
+            // Assert
+            Assert.True(remC1);
+            Assert.False(remC2);
+        }
+        
+        [Fact]
+        public void GetCategoryTest()
+        {
+            // Arrange
+            Category category1 = new Category(1) { Name = "Salary", Color = Color.Blue };
+        
+            Wallet wallet1 = new Wallet(1) { Name = "Wall_let", Currency = "UAH" };
+        
+            wallet1.AddCategory(category1);
+        
+            // Act
+            Category actualNonNull = wallet1.GetCategory(1);
+            Category actualNull = wallet1.GetCategory(0);
+        
+            // Assert
+            Assert.Equal(category1, actualNonNull);
+            Assert.Null(actualNull);
+        }
+        
+        [Fact]
+        public void GetCategoriesTest()
+        {
+            // Arrange
+            Wallet wallet1 = new Wallet(1) { Name = "Wall_let", Currency = "UAH" };
+
+            List<Category> categories = new List<Category>();
+            for (int i = 0; i < 10; i++)
+            {
+                Category category1 = new Category(i) { Name = "Salary" + i, Color = Color.Blue };
+                categories.Add(category1);
+                wallet1.AddCategory(category1);
+            }
+
+            // Act
+            List<Category> actual = wallet1.GetCategories();
+        
+            // Assert
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.Equal(categories[i], actual[i]);
             }
         }
 

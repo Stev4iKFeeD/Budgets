@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BusinessLayer
 {
@@ -49,19 +50,21 @@ namespace BusinessLayer
         //     get => _transactions;
         //     set => _transactions = value;
         // }
-
-        public List<Category> Categories
-        {
-            get => _categories;
-            set => _categories = value;
-        }
+        
+        // ???
+        // public List<Category> Categories
+        // {
+        //     get => _categories;
+        //     set => _categories = value;
+        // }
 
 
         public Wallet()
         {
             // Transactions = new List<Transaction>();
+            // Categories = new List<Category>();
             _transactions = new List<Transaction>();
-            Categories = new List<Category>();
+            _categories = new List<Category>();
         }
 
         public Wallet(int id) : this()
@@ -168,6 +171,63 @@ namespace BusinessLayer
         public List<Transaction> GetTenRecentlyAddedTransactions()
         {
             return GetTransactions(Math.Max(1, _transactions.Count - 9), _transactions.Count);
+        }
+
+        public bool AddCategory(Category category)
+        {
+            if (_categories.Contains(category))
+                return false;
+
+            _categories.Add(category);
+            return true;
+        }
+
+        public bool RemoveCategory(Category category)
+        {
+            return _categories.Remove(category);
+        }
+
+        /**
+         * @param index  begins with 1
+         */
+        public bool RemoveCategory(int index)
+        {
+            if (index < 1 || index > _categories.Count)
+                return false;
+
+            _categories.RemoveAt(index - 1);
+            return true;
+        }
+
+        /**
+         * @param index  begins with 1
+         */
+        public Category GetCategory(int index)
+        {
+            if (index < 1 || index > _categories.Count)
+                return null;
+
+            return _categories[index - 1];
+        }
+
+        // /**
+        //  * @param from  begins with 1
+        //  * @param to    inclusive
+        //  */
+        // public List<Category> GetCategories(int from, int to)
+        // {
+        //     int firstIndex = Math.Min(from, to) - 1;
+        //     int count = Math.Max(from, to) - firstIndex;
+        //     if (firstIndex < 0 || count > _categories.Count)
+        //         return null;
+        //
+        //     return _categories.GetRange(firstIndex, count);
+        // }
+
+        public List<Category> GetCategories()
+        {
+            // return _categories.GetRange(0, _categories.Count);
+            return _categories.ToList();
         }
 
         public bool Validate()
