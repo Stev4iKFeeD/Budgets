@@ -30,7 +30,7 @@ namespace BusinessLayerTests
             decimal expected = initialBalance + transaction1.Sum + transaction2.Sum + transaction3.Sum;
 
             // Act
-            decimal actual = wallet1.CurrentBalance();
+            decimal actual = wallet1.CurrentBalance;
 
             // Assert
             Assert.Equal(expected, actual);

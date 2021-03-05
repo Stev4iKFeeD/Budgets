@@ -11,6 +11,7 @@ namespace BusinessLayer
         private string _description;
         private string _currency;
         private decimal _initialBalance;
+        private decimal _currentWithoutInitialBalance;
         private List<Transaction> _transactions;
         private List<Category> _categories;
 
@@ -44,13 +45,19 @@ namespace BusinessLayer
             set => _initialBalance = value;
         }
 
+        public decimal CurrentBalance
+        {
+            get => _currentWithoutInitialBalance + _initialBalance;
+            private set => _currentWithoutInitialBalance = value;
+        }
+
         // ???
         // public List<Transaction> Transactions
         // {
         //     get => _transactions;
         //     set => _transactions = value;
         // }
-        
+
         // ???
         // public List<Category> Categories
         // {
@@ -73,14 +80,14 @@ namespace BusinessLayer
         }
 
 
-        public decimal CurrentBalance()
-        {
-            decimal res = _initialBalance;
-            foreach (var transaction in _transactions)
-                res += transaction.Sum;
-
-            return res;
-        }
+        // public decimal CurrentBalance()
+        // {
+        //     decimal res = _initialBalance;
+        //     foreach (var transaction in _transactions)
+        //         res += transaction.Sum;
+        //
+        //     return res;
+        // }
 
         public decimal Incomes(DateTime since, DateTime to)
         {
@@ -123,11 +130,13 @@ namespace BusinessLayer
                     return false;
 
             _transactions.Add(transaction);
+            _currentWithoutInitialBalance += transaction.Sum;
             return true;
         }
 
         public bool RemoveTransaction(Transaction transaction)
         {
+            _currentWithoutInitialBalance -= transaction.Sum;
             return _transactions.Remove(transaction);
         }
 
@@ -139,6 +148,7 @@ namespace BusinessLayer
             if (index < 1 || index > _transactions.Count)
                 return false;
 
+            _currentWithoutInitialBalance -= _transactions[index - 1].Sum;
             _transactions.RemoveAt(index - 1);
             return true;
         }
