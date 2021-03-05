@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace BusinessLayer
 {
@@ -12,7 +11,7 @@ namespace BusinessLayer
         private Category _category;
         private string _description;
         private DateTime _date;
-        private List<FileStream> _files;
+        private List<string> _files;
 
         public int Id
         {
@@ -50,7 +49,7 @@ namespace BusinessLayer
             set => _date = value;
         }
 
-        public List<FileStream> Files
+        public List<string> Files
         {
             get => _files;
             set => _files = value;
@@ -59,18 +58,12 @@ namespace BusinessLayer
 
         public Transaction()
         {
-            Files = new List<FileStream>();
+            Files = new List<string>();
         }
 
         public Transaction(int id) : this()
         {
             Id = id;
-        }
-
-        ~Transaction()
-        {
-            foreach (var file in _files)
-                file.Close();
         }
 
 

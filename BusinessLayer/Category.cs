@@ -9,7 +9,7 @@ namespace BusinessLayer
         private string _name;
         private string _description;
         private Color _color;
-        private FileStream _icon;
+        private string _icon;
 
         public int Id
         {
@@ -35,7 +35,7 @@ namespace BusinessLayer
             set => _color = value;
         }
 
-        public FileStream Icon
+        public string Icon
         {
             get => _icon;
             set => _icon = value;
@@ -50,11 +50,6 @@ namespace BusinessLayer
         public Category(int id) : this()
         {
             Id = id;
-        }
-
-        ~Category()
-        {
-            _icon?.Close();
         }
 
 
