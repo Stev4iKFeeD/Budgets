@@ -89,15 +89,22 @@ namespace BusinessLayer
         //     return res;
         // }
 
-        public decimal Incomes(DateTime since, DateTime to)
+        private decimal IncomesOrExpenses(DateTime since, DateTime to, bool incomes)
         {
             decimal res = 0;
             foreach (var transaction in _transactions)
                 if (since <= transaction.Date && transaction.Date <= to)
-                    if (transaction.Sum > 0)
+                    if (incomes && transaction.Sum > 0)
+                        res += transaction.Sum;
+                    else if (!incomes && transaction.Sum < 0)
                         res += transaction.Sum;
 
-            return res;
+            return incomes ? res : Math.Abs(res);
+        }
+
+        public decimal Incomes(DateTime since, DateTime to)
+        {
+            return IncomesOrExpenses(since, to, true);
         }
 
         public decimal IncomesForCurrentMonth()
@@ -108,13 +115,7 @@ namespace BusinessLayer
 
         public decimal Expenses(DateTime since, DateTime to)
         {
-            decimal res = 0;
-            foreach (var transaction in _transactions)
-                if (since <= transaction.Date && transaction.Date <= to)
-                    if (transaction.Sum < 0)
-                        res += transaction.Sum;
-
-            return Math.Abs(res);
+            return IncomesOrExpenses(since, to, false);
         }
 
         public decimal ExpensesForCurrentMonth()
