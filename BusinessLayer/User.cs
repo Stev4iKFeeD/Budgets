@@ -9,6 +9,7 @@ namespace BusinessLayer
         private string _lastName;
         private string _email;
         private List<Wallet> _wallets;
+        private List<SharedWallet> _sharedWallets;
         private List<Category> _categories;
 
         public int Id
@@ -58,6 +59,12 @@ namespace BusinessLayer
             set => _wallets = value;
         }
 
+        public List<SharedWallet> SharedWallets
+        {
+            get => _sharedWallets;
+            set => _sharedWallets = value;
+        }
+
         public List<Category> Categories
         {
             get => _categories;
@@ -68,6 +75,7 @@ namespace BusinessLayer
         public User()
         {
             Wallets = new List<Wallet>();
+            SharedWallets = new List<SharedWallet>();
             Categories = new List<Category>();
         }
 
@@ -76,6 +84,14 @@ namespace BusinessLayer
             Id = id;
         }
 
+
+        /**
+         * @param index  begins with 1
+         */
+        public SharedWallet ShareWallet(int index)
+        {
+            return new SharedWallet(_wallets[index - 1]);
+        }
 
         public bool Validate()
         {
